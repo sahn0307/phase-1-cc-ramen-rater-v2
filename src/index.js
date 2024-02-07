@@ -1,18 +1,26 @@
 // index.js
-
+const url = "http://localhost:3000/ramens"
 //!    
 //json-server --watch db.json
+//global dom element variables
+const menu = document.querySelector('#ramen-menu');
+const form = document.querySelector('#new-ramen');
+const updateForm = document.querySelector('#edit-ramen');
+const detailImage = document.querySelector('#ramen-detail .detail-image');
+const name = document.querySelector('#ramen-detail .name');
+const restaurant = document.querySelector('#ramen-detail .restaurant');
+const rating = document.querySelector('#rating-display');
+const comment = document.querySelector('#comment-display');
 
-const url = "http://localhost:3000/ramens"
 // Callbacks
 //! display elements when user clicks on menu items
 const handleClick = (ramen) => {
-  //! select elements
-  const detailImage = document.querySelector('#ramen-detail .detail-image');
-  const name = document.querySelector('#ramen-detail .name');
-  const restaurant = document.querySelector('#ramen-detail .restaurant');
-  const rating = document.querySelector('#rating-display');
-  const comment = document.querySelector('#comment-display');
+  //! select elements (moved to global scope)
+  // const detailImage = document.querySelector('#ramen-detail .detail-image');
+  // const name = document.querySelector('#ramen-detail .name');
+  // const restaurant = document.querySelector('#ramen-detail .restaurant');
+  // const rating = document.querySelector('#rating-display');
+  // const comment = document.querySelector('#comment-display');
 
   //! update the elements
   detailImage.src = ramen.image;
@@ -23,7 +31,7 @@ const handleClick = (ramen) => {
 };
 
 const addSubmitListener = () => {
-  const form = document.querySelector('#new-ramen');
+  // const form = document.querySelector('#new-ramen'); global scoped
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -37,7 +45,7 @@ const addSubmitListener = () => {
     };
 
     //! add new ramen to menu
-    const menu = document.querySelector('#ramen-menu');
+    // const menu = document.querySelector('#ramen-menu'); global scoped
     const img = document.createElement('img');
     img.src = newRamen.image;
     img.alt = newRamen.name;
@@ -54,9 +62,10 @@ const displayRamens = () => {
   fetch(url)
     .then(resp => resp.json())
     .then(ramens => {
-      const menu = document.querySelector('#ramen-menu');
+      // const menu = document.querySelector('#ramen-menu'); global scoped
       //! clear menu?
       //menu.innerHTML = '';
+
       ramens.forEach(ramen => {
         const img = document.createElement('img');
         img.src = ramen.image;
@@ -65,12 +74,16 @@ const displayRamens = () => {
         //! save id to use for handleClick
         img.addEventListener('click', () => handleClick(ramen));
         menu.appendChild(img);
+
+        //! display firstRamen when page loads
+        handleClick(ramens[0]);
+
       });
     });
 };
 
 const addUpdateListener = () => {
-  const updateForm = document.querySelector('#edit-ramen');
+  // const updateForm = document.querySelector('#edit-ramen'); global scoped
   updateForm.addEventListener('submit', (e) => {
     e.preventDefault(); 
     
@@ -79,8 +92,8 @@ const addUpdateListener = () => {
     const newComment = document.querySelector('#edit-comment').value;
     
     // update data in the DOM
-    document.querySelector('#rating-display').textContent = newRating;
-    document.querySelector('#comment-display').textContent = newComment;
+    rating.textContent = newRating;
+    comment.textContent = newComment;
   });
 };
 
@@ -93,7 +106,8 @@ const main = () => {
   addSubmitListener();
   // Invoke addUpdateListener
   addUpdateListener();
-}
+
+};
 
 main();
 
